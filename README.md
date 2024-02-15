@@ -9,7 +9,7 @@
 <br />
 
 ## Live Demo:
-https://www.sondepremler.netlify.app
+https://sondepremler.netlify.app
 <br /><br /><br />
 
 **This application provides information about earthquakes that occurred in Turkey within the last 24 hours.**
