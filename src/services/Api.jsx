@@ -1,17 +1,28 @@
 const baseURL = import.meta.env.MODE === "development" ? "https://deprem.afad.gov.tr" : "https://sondepremler.netlify.app" 
 
-console.log(baseURL)
+var startDate = ""
+var endDate = ""
 
-const currentDate = new Date();
-const endDate = `${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${currentDate.getDate() + 1}`;
+function formatDate(date) {
+  var isoString = date.toISOString();
+  var formattedDate = isoString.replace(/\.\d{3}Z$/, '').replace(' ', 'T');
+  return formattedDate;
+}
 
-const oneDayAgo = new Date();
-oneDayAgo.setDate(currentDate.getDate() - 1);
-const startDate = `${oneDayAgo.getFullYear()}-${oneDayAgo.getMonth() + 1}-${oneDayAgo.getDate()}`;
-
+const calculateDates = () => {
+  const start = new Date();
+  start.setDate(start.getDate() - 1);
+  var end = new Date(start);
+  end.setDate(end.getDate() + 1);
+  return {
+    startDate: formatDate(start),
+    endDate: formatDate(end),
+  };
+}
 
 export async function getEarthquakesLast1Day() {
     try {
+      const { startDate, endDate } = calculateDates();
       const response = await fetch(`/apiv2/event/filter?start=${startDate}&end=${endDate}&orderby=timedesc`)
       if (!response.ok) {
         throw new Error("Failed to get earthquakes!");
@@ -26,6 +37,7 @@ export async function getEarthquakesLast1Day() {
 
   export async function getLastEarthquake() {
     try {
+      const { startDate, endDate } = calculateDates();
       const response = await fetch(`/apiv2/event/filter?start=${startDate}&end=${endDate}&orderby=timedesc`)
       if (!response.ok) {
         throw new Error("Failed to get last earthquake!");
