@@ -7,6 +7,8 @@ function Map() {
   const [earthquake, setEarthquake] = useState({})
   const [loading, setLoading] = useState(true)
 
+  const {location, latitude, longitude, magnitude, date, type} = earthquake;
+  
   useEffect(() => {
     const fetchLastEarthquake = async () => {
       try {
@@ -28,7 +30,7 @@ function Map() {
     const formattedTime = `${quakeDateUTC.toLocaleDateString()} ${quakeDateTSI.toLocaleTimeString().slice(0, index)}`;
     return formattedTime;
   }
-  
+
   return (
     <div className='w-full md:w-3/4'>
       { loading ? 
@@ -36,7 +38,7 @@ function Map() {
         <CircularProgress />
         </Box>
         :
-      <MapContainer center={[earthquake.latitude, earthquake.longitude]} zoom={6} scrollWheelZoom={false} className='h-screen w-full'>
+      <MapContainer center={[latitude, longitude]} zoom={6} scrollWheelZoom={false} className='h-screen w-full'>
       <TileLayer url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"/>
       <Circle
       center={[earthquake.latitude, earthquake.longitude]}
@@ -48,9 +50,9 @@ function Map() {
       >      
       <Tooltip direction='top' permanent>
           <p className='text-red-600 font-bold text-sm'>Earthquake</p>
-        <span><b>Location:</b> {`${earthquake.location}`}</span><br/>
-        <span><b>Magnitude:</b> {`${earthquake.magnitude} (${earthquake.type})`}</span><br/>
-        <span><b>Date:</b> {formatQuakeTime(earthquake.date)}</span>
+        <span><b>Location:</b> {`${location}`}</span><br/>
+        <span><b>Magnitude:</b> {`${magnitude} (${type})`}</span><br/>
+        <span><b>Date:</b> {formatQuakeTime(date)}</span>
         </Tooltip>
       </Circle>
     </MapContainer>
